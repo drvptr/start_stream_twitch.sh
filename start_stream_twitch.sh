@@ -96,10 +96,10 @@ start_stream() {
     echo "[*] Starting ffmpeg stream..."
     ffmpeg \
     -f x11grab -framerate 25 -video_size 1920x1080 -i :0.0 \
-    -f oss -i "$DEF_DEV" \
-    -f oss -i "$VDSP_DEV" \
+    -f oss -i $DEF_DEV \
+    -f oss -i $VDSP_DEV \
     -filter_complex "[1:a]aresample=async=1:first_pts=0[a1]; \
-                   [2:a]aresample=async=1:first_pts=0,highpass=f=450,lowpass=f=4000,afftdn=nr=64[a2] \
+                   [2:a]aresample=async=1:first_pts=0,highpass=f=450,lowpass=f=4000,afftdn=nr=64[a2]; \
                    [a1][a2]amix=inputs=2:duration=longest[aout]" \
     -map 0:v -map "[aout]" \
     -vcodec libx264 -pix_fmt yuv420p -preset ultrafast -b:v 2500k \
